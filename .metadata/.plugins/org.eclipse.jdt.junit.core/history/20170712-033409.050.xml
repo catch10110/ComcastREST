@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="Rerun org.comcast.ad.service.AdServiceIntg.testCampaignExpiring" project="ad" tests="1" started="1" failures="0" errors="0" ignored="0">
-  <testcase name="testCampaignExpiring" classname="org.comcast.ad.service.AdServiceIntg" time="2.254"/>
-</testrun>

@@ -22,9 +22,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-/**
- * Helper method for the AdResource REST endpoints
- */
 public class AdServiceHelper {
 
 	public static final HttpClient httpClient = HttpClientBuilder.create().build();

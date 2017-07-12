@@ -13,7 +13,6 @@
 <fullyQualifiedTypeName name="com.sun.research.ws.wadl.Response"/>
 <fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
 <fullyQualifiedTypeName name="org.comcast.ad.exception.DataNotFoundException"/>
-<fullyQualifiedTypeName name="org.comcast.ad.database.DatabaseClass"/>
 <fullyQualifiedTypeName name="org.comcast.ad.exception.InvalidInputException"/>
 <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
 <fullyQualifiedTypeName name="java.awt.List"/>
@@ -34,6 +33,7 @@
 <fullyQualifiedTypeName name="com.fasterxml.jackson.core.type.TypeReference"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="org.comcast.ad.service.AdServiceHelper"/>
-<fullyQualifiedTypeName name="org.comcast.ad.model.CampaignModel"/>
 <fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="org.comcast.ad.database.DatabaseClass"/>
+<fullyQualifiedTypeName name="org.comcast.ad.model.CampaignModel"/>
 </qualifiedTypeNameHistroy>

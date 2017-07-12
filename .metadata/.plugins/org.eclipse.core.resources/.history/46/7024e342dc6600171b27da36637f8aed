@@ -25,9 +25,6 @@ public class AdServiceIntg {
 	}
 	
 	@Test
-	/**
-	 * Tests creating and retrieving one ad campaign
-	 */
 	public void testCreateAndGetCampaign() throws Exception {
 		HttpResponse createResponse = AdServiceHelper.createAd("Apple", 16, "SomeContent");
 		Assert.assertEquals(201, createResponse.getStatusLine().getStatusCode());
@@ -46,10 +43,6 @@ public class AdServiceIntg {
 		Assert.assertEquals("SomeContent", camModel.getAdContent());
 	}
 	
-	/**
-	 * Creates campaigns under one user with different expiration date.
-	 * Tests the ability for the backend to remove expired campaigns and return the next active one.
-	 */
 	@Test
 	public void testCampaignExpiring() throws Exception {
 		HttpResponse createResponse;
@@ -85,9 +78,6 @@ public class AdServiceIntg {
 		Assert.assertEquals("2", camModelList.get(0).getAdContent());
 	}
 	
-	/**
-	 * Creates numerous partners and campaigns and tests to see if they are added and retrieved correctly
-	 */
 	@Test
 	public void testCreateManyAndGetCampaigns() throws Exception {
 		HttpResponse createResponse;
@@ -116,10 +106,6 @@ public class AdServiceIntg {
 		}
 	}
 	
-	/**
-	 * Creates numerous partners and campaigns with different expiration time.
-	 * Tests to see if the campaigns expire correctly.
-	 */
 	@Test
 	public void testManyCampaignsExpiring() throws Exception {
 		HttpResponse createResponse;
