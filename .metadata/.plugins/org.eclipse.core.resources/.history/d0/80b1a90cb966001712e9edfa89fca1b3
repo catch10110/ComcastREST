@@ -1,0 +1,27 @@
+package org.comcast.ad.service;
+
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.comcast.ad.model.CampaignModel;
+
+public class AdServiceHelper {
+
+	public static final HttpClient httpClient = HttpClientBuilder.create().build();
+	public static final String url_base = "http://localhost:8080/ad/";
+	public static final String jsonType = "application/json";
+	
+	public static HttpResponse createAd() throws Exception {
+		HttpUriRequest request = new HttpGet(url_base);
+		request.setHeader("Accept", jsonType);
+		return httpClient.execute(request);
+	}
+	
+	public static List<CampaignModel> getCurrentCampaignById(String partnerId) {
+		
+	}
+}

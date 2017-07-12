@@ -1,0 +1,34 @@
+1499731861953	Delete element
+1499733625991	Move 'index.jsp' to 'src'
+1499733654377	Move 'index.jsp' to 'WEB-INF'
+1499733660282	Move 'index.jsp' to 'webapp'
+1499734511791	Move 'index.jsp' to 'src'
+1499734551696	Move 'index.jsp' to 'webapp'
+1499737438489	Delete element
+1499741224134	Rename method 'check'
+1499741234062	Rename local variable 'id'
+1499741305046	Rename field 'ads'
+1499748568823	Delete element
+1499793508272	Rename type 'Ad'
+1499794126661	Rename local variable 'd'
+1499794157258	Rename local variable 'a'
+1499802182366	Rename field 'partnerId'
+1499802188231	Rename field 'adContent'
+1499804838175	Rename field 'partner_id'
+1499804866060	Rename field 'ad_content'
+1499807784782	Rename type 'Campaign'
+1499807792677	Rename type 'PartnerAd'
+1499811687980	Rename method 'getAdById'
+1499812538667	Delete element
+1499816533734	Rename field 'adsDB'
+1499817436937	Delete elements
+1499817654823	Delete element
+1499817964098	Rename field 'adsMap'
+1499818488308	Rename local variable 'ad'
+1499819883665	Rename local variable 'partnerAdModel'
+1499819887890	Rename local variable 'model'
+1499820778969	Rename method 'getAdsMap'
+1499835154778	Rename field 'partnerId'
+1499836386321	Rename method 'getTest'
+1499840327621	Rename local variable 'CamModel'
+1499844207142	Rename local variable 'j'

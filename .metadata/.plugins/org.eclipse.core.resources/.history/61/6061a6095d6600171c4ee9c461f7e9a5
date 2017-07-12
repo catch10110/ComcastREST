@@ -1,0 +1,57 @@
+package org.comcast.ad.model;
+
+import java.time.LocalDateTime;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class PartnerAd {
+	private String partnerId;
+	private int duration;
+	private String adContent;
+	//private LocalDateTime expiration;
+	
+	public PartnerAd() {
+		;
+	}
+	
+	public PartnerAd(String partnerId, int duration, String adContent) {
+		this.partnerId = partnerId;
+		this.duration = duration;
+		this.adContent = adContent;
+		//this.expiration = LocalDateTime.now().plusSeconds(duration);
+	}
+	
+	public String getPartnerId() {
+		return partnerId;
+	}
+	
+	public void setPartnerId(String partnerId) {
+		this.partnerId = partnerId;
+	}
+	
+	public int getDuration() {
+		return duration;
+	}
+	
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	
+	public String getAdContent() {
+		return adContent;
+	}
+	
+	public void setAdContent(String adContent) {
+		this.adContent = adContent;
+	}
+
+//	public LocalDateTime getExpiration() {
+//		return expiration;
+//	}
+//
+//	public void setExpiration(LocalDateTime expiration) {
+//		this.expiration = expiration;
+//	}
+//	
+}

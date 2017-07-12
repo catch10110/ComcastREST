@@ -1,0 +1,8 @@
+package org.comcast.ad.exception;
+
+public class NoActiveCampaignException extends RuntimeException {
+
+	public NoActiveCampaignException(String message) {
+		super(message);
+	}
+}

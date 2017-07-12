@@ -1,0 +1,31 @@
+package org.comcast.ad.model;
+
+public class Campaign {
+	private int duration;
+	private String adContent;
+	
+	public Campaign() {
+		;
+	}
+	
+	public Campaign(int duration, String adContent) {
+		super();
+		this.duration = duration;
+		this.adContent = adContent;
+	}
+	
+	public int getDuration() {
+		return duration;
+	}
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	public String getAdContent() {
+		return adContent;
+	}
+	public void setAdContent(String adContent) {
+		this.adContent = adContent;
+	}
+	
+	
+}

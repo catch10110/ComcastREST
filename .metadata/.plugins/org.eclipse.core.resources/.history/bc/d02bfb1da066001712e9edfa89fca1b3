@@ -1,0 +1,5 @@
+package org.comcast.ad.exception;
+
+public class InvalidInputException {
+
+}

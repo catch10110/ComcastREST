@@ -1,0 +1,42 @@
+package org.comcast.ad.service;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+
+public class AdServiceIntg {
+
+	HttpClient httpClient = HttpClientBuilder.create().build();
+	public final String url_base = "http://localhost:8080/ad/";
+	
+	@Before
+	public void setup() {
+		
+	}
+	
+	@Test
+	public void CreateAdsIntg() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.createAd();
+		System.out.println(httpResponse);
+		Assert.assertEquals(201, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void getAllAdsIntg() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.getAllCurrentCampaigns();
+		Assert.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void getAdByPartnerId() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.getCurrentCampaignById("1");
+		Assert.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+}

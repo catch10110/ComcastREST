@@ -1,0 +1,17 @@
+package org.comcast.ad.exception;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
+
+@Provider
+public class NoActiveCampaignExceptionMapper implements ExceptionMapper<NoActiveCampaignException> {
+
+	@Override
+	public Response toResponse(NoActiveCampaignException e) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+}

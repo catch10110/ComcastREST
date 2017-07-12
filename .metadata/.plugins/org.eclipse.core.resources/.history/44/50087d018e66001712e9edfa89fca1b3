@@ -1,0 +1,123 @@
+package org.comcast.ad.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+
+import org.comcast.ad.database.DatabaseClass;
+import org.comcast.ad.exception.DataNotFoundException;
+import org.comcast.ad.model.CampaignModel;
+import org.comcast.ad.model.PartnerAdModel;
+
+public class AdService {
+
+	private Map<String, Queue<CampaignModel>> adsDB = DatabaseClass.getAdsMap();
+	
+	public AdService() {
+		;
+	}
+	
+//	public List<CampaignModel> getAllAds() {
+//		List<Queue<CampaignModel>> campaignList = new ArrayList<>(adsDB.values());
+//		
+//		List<CampaignModel> campaignResultList = new ArrayList<>();
+//		for (Queue<CampaignModel> q : campaignList) {
+//			List<CampaignModel> list = new ArrayList<>(q);
+//			for (CampaignModel campaign : list) {
+//				campaignResultList.add(campaign);
+//			}
+//		}
+//		
+//		return campaignResultList;
+//	}
+	
+	public List<CampaignModel> getAllAds() {
+		List<Queue<CampaignModel>> campaignList = new ArrayList<>(adsDB.values());
+		List<CampaignModel> campaignResultList = new ArrayList<>();
+		
+		removeExpiredCampaigns();
+		
+		for (Queue<CampaignModel> q : campaignList) {
+			List<CampaignModel> list = new ArrayList<>(q);
+			for (CampaignModel campaign : list) {
+				campaignResultList.add(campaign);
+			}
+		}
+		
+		return campaignResultList;
+	}
+	
+	public List<CampaignModel> getAllAdsByPartner(String partnerId) {
+		List<CampaignModel> campaignResultList = new ArrayList<>();
+		
+		Queue<CampaignModel> q = adsDB.get(partnerId);
+		List<CampaignModel> list = new ArrayList<>(q);
+		
+		for (CampaignModel campaign : list) {
+			campaignResultList.add(campaign);
+		}
+		
+		return campaignResultList;
+	}
+	
+	public CampaignModel getCurrentAdByPartnerId(String partnerId) throws DataNotFoundException {
+		if (isCampaignByIdValid(partnerId)) {
+			return adsDB.get(partnerId).peek();
+		}
+		throw new DataNotFoundException("Ad campaign with partner id " + partnerId + " was not found.");
+	}
+	
+	public void deleteAdById(String partnerId) {
+		;
+	}
+	
+	public PartnerAdModel addAd(PartnerAdModel ad) {
+		if (ad.getDuration() > 0) {
+			CampaignModel campaign = new CampaignModel(ad);
+			if (adsDB.containsKey(campaign.getPartnerId())) {
+				adsDB.get(campaign.getPartnerId()).add(campaign);
+			} else {
+				Queue<CampaignModel> q = new LinkedList<>();
+				q.add(campaign);
+				adsDB.put(campaign.getPartnerId(), q);
+			}
+		}
+		return ad;
+		//TODO: Throw error
+	}
+	
+	/**
+	 * Checks to see if the current partner has any valid ad campaigns.
+	 * The queue is cycled and any expired campaign is removed.
+	 * Returns true if we can find an unexpired campaign, false otherwise.
+	 */
+	private boolean isCampaignByIdValid(String partnerKey) {
+
+		removeExpiredCampaigns(partnerKey);
+		
+		if (adsDB.get(partnerKey) != null && !adsDB.get(partnerKey).isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+	
+	private void removeExpiredCampaigns(String partnerKey) {
+		while (adsDB.get(partnerKey) != null && !adsDB.get(partnerKey).isEmpty()) {
+			if (adsDB.get(partnerKey).peek().getExpiration().isAfter(LocalDateTime.now())) {
+				break;
+			} else {
+				adsDB.get(partnerKey).poll();
+			}
+		}
+	}
+	
+	private void removeExpiredCampaigns() {
+		for (String s : adsDB.keySet()) {
+			removeExpiredCampaigns(s);
+		}
+	}
+	
+}

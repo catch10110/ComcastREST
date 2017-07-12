@@ -1,0 +1,80 @@
+package org.comcast.ad.resources;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.comcast.ad.model.CampaignModel;
+import org.comcast.ad.model.PartnerAdModel;
+import org.comcast.ad.service.AdService;
+
+@Path("/ad")
+public class AdResource {
+	
+	AdService adService = new AdService();
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<CampaignModel> getTest() {
+		return adService.getAllAds();
+	}
+	
+	@GET
+	@Path("/{partnerId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CampaignModel getCurrentCampaignById(@PathParam("partnerId") String partnerId, @QueryParam("all") boolean all) {
+		return adService.getAdById(partnerId);
+	}
+
+	
+//	@GET
+//	@Path("/{partnerId}")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public List<CampaignModel> getAllCampaignById(@PathParam("partnerId") String partnerId, @QueryParam("all") boolean all) {
+////		if (all) {
+////			return adService.getAllAdsByPartner(partnerId);
+////		} else {
+////			List<CampaignModel> list = new ArrayList<CampaignModel>();
+////			list.add(adService.getAdById(partnerId));
+////			return list;
+////		}
+//		return null;
+//	}
+	
+//	@POST
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public TestModel testAdd(TestModel model) {
+//
+//		return model;
+//
+//	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public PartnerAdModel addAd(PartnerAdModel ad) {
+		adService.addAd(ad);
+		return ad;
+		//return Response.status(201).entity(resultString).build();
+	}
+	
+	
+	
+//	@POST
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public String addAd(@FormParam("partner_id") String id, @FormParam("duration") String duration, @FormParam("ad_content") String adContent) {
+//		
+//		return "posted";
+//	}
+
+}

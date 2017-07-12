@@ -1,0 +1,5 @@
+package org.comcast.ad.service;
+
+public class AdServiceIntg {
+
+}

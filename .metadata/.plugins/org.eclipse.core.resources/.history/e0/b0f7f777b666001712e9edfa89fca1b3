@@ -1,0 +1,25 @@
+package org.comcast.ad.service;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.junit.Before;
+import org.junit.Test;
+
+public class AdServiceIntg {
+
+	public final String url_base = "http://localhost:8080/ad/";
+	
+	@Before
+	public void setup() {
+		
+	}
+	
+	@Test
+	public void CreateAdsIntg() {
+		HttpUriRequest request = new HttpGet(url_base);
+		
+		HttpResponse httpResponse = HttpClient.execute(request);
+	}
+}

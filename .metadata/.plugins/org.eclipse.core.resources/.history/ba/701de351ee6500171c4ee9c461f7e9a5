@@ -1,0 +1,38 @@
+package org.comcast.ad.resources;
+
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.comcast.ad.model.Ad;
+import org.comcast.ad.service.AdService;
+
+@Path("/ad")
+public class AdResource {
+	
+	AdService adService = new AdService();
+	
+	@GET
+	@Produces(MediaType.APPLICATION_XML)
+	public List<Ad> getTest() {
+		return adService.getAllAds();
+	}
+	
+//	@GET
+//	@Produces(MediaType.TEXT_PLAIN)
+//	public String getTest2() {
+//		return "Hello World GET2!";
+//	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_XML)
+	public String postTest() {
+		return "Post";
+	}
+
+}

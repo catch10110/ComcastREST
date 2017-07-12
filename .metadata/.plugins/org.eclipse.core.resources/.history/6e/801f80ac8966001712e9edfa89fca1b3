@@ -1,0 +1,6 @@
+package org.comcast.ad.exception;
+
+public class DataNotFoundException extends RuntimeException {
+
+
+}

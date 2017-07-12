@@ -1,0 +1,7 @@
+package org.comcast.ad.exception;
+
+import javax.ws.rs.ext.ExceptionMapper;
+
+public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
+
+}

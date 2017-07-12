@@ -1,0 +1,62 @@
+package org.comcast.ad.resources;
+
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.comcast.ad.model.Campaign;
+import org.comcast.ad.model.PartnerAd;
+import org.comcast.ad.model.TestModel;
+import org.comcast.ad.service.AdService;
+
+@Path("/ad")
+public class AdResource {
+	
+	AdService adService = new AdService();
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Campaign> getTest() {
+		return adService.getAllAds();
+	}
+	
+	@GET
+	@Path("/{partnerId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Campaign getCurrentCampaignById(@PathParam("partnerId") String partnerId) {
+		return adService.getAdById(partnerId);
+	}
+
+	@POST
+	public String testAdd() {
+		//adService.addTest(ad);
+		return "works!";
+		//return Response.status(201).entity(resultString).build();
+	}
+	
+//	@POST
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public PartnerAd addAd(PartnerAd ad) {
+//		adService.addAd(ad);
+//		return ad;
+//		//return Response.status(201).entity(resultString).build();
+//	}
+	
+	
+	
+//	@POST
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public String addAd(@FormParam("partner_id") String id, @FormParam("duration") String duration, @FormParam("ad_content") String adContent) {
+//		
+//		return "posted";
+//	}
+
+}

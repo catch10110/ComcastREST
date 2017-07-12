@@ -1,0 +1,89 @@
+package org.comcast.ad.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+
+import org.comcast.ad.database.DatabaseClass;
+import org.comcast.ad.model.Campaign;
+import org.comcast.ad.model.PartnerAd;
+import org.comcast.ad.model.TestModel;
+
+public class AdService {
+
+	private Map<String, Queue<Campaign>> adsDB = DatabaseClass.getAdsMap();
+	
+	public AdService() {
+//		Ad ad1 = new Ad("1", 134432432, "Ad1a");
+//		Ad ad2 = new Ad("2", 22432343, "Ad2");
+//		Ad ad3 = new Ad("1", 3342432, "Ad1b");
+//		
+//		addAd(ad1);
+//		addAd(ad2);
+//		addAd(ad3);
+	}
+	
+	public List<Campaign> getAllAds() {
+		List<Queue<Campaign>> campaignList = new ArrayList<>(adsDB.values());
+		
+		List<Campaign> campaignResultList = new ArrayList<>();
+		for (Queue<Campaign> q : campaignList) {
+			List<Campaign> list = new ArrayList<>(q);
+			for (Campaign campaign : list) {
+				campaignResultList.add(campaign);
+			}
+		}
+		
+		return campaignResultList;
+	}
+	
+	public Campaign getAdById(String partnerId) {
+		if (isCampaignByIdValid(partnerId)) {
+			return adsDB.get(partnerId).peek();
+		}
+		return null;
+	}
+	
+	public void deleteAdById(String partnerId) {
+		;
+	}
+	
+	public void addTest(TestModel tm) {
+		;
+	}
+	
+	public void addAd(PartnerAd ad) {
+		if (ad.getDuration() > 0) {
+			Campaign campaign = new Campaign(ad);
+			//ad.setExpiration(LocalDateTime.now().plusSeconds(ad.getDuration()));
+			if (adsDB.containsKey(campaign.getPartnerId())) {
+				adsDB.get(campaign.getPartnerId()).add(campaign);
+			} else {
+				Queue<Campaign> q = new LinkedList<>();
+				q.add(campaign);
+				adsDB.put(campaign.getPartnerId(), q);
+				//adsDB.get(ad.getPartnerId()).add(ad);
+			}
+		}
+		//TODO: Throw error
+	}
+	
+	
+	
+	
+	
+	private boolean isCampaignByIdValid(String partnerKey) {
+
+		while (adsDB.get(partnerKey) != null) {
+			if (adsDB.get(partnerKey).peek().getExpiration().isAfter(LocalDateTime.now())) {
+				return true;
+			} else {
+				adsDB.get(partnerKey).poll();
+			}
+		}
+		return false;
+	}
+}

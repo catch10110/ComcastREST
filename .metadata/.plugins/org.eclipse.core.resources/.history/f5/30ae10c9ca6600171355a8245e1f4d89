@@ -1,0 +1,80 @@
+package org.comcast.ad.service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.comcast.ad.model.CampaignModel;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+
+
+public class AdServiceIntg {
+
+	HttpClient httpClient = HttpClientBuilder.create().build();
+	public final String url_base = "http://localhost:8080/ad/";
+	
+	@Before
+	public void setup() {
+		
+	}
+	
+	@Test
+	public void CreateAdsIntg() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.createAd();
+		System.out.println(httpResponse);
+		Assert.assertEquals(201, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void getAllAdsIntg() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.getAllCurrentCampaigns();
+		Assert.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void getAdByPartnerId() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.getCurrentCampaignById("1");
+		Assert.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void CreateAndGetCampaign() throws Exception {
+		HttpResponse createResponse = AdServiceHelper.createAd("11", 1, "SomeContent");
+		Assert.assertEquals(201, createResponse.getStatusLine().getStatusCode());
+		
+		HttpResponse getResponse = AdServiceHelper.getCurrentCampaignById("1");
+		Assert.assertEquals(200, getResponse.getStatusLine().getStatusCode());
+		List<CampaignModel> camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+		
+		
+		Assert.assertEquals(1, camModelList.size());
+		
+		CampaignModel camModel = camModelList.get(0);
+		
+		Assert.assertEquals("11", camModel.getPartnerId());
+		Assert.assertTrue(LocalDateTime.now().isBefore(camModel.getExpiration()));
+		Assert.assertEquals("SomeContent", camModel.getAdContent());
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

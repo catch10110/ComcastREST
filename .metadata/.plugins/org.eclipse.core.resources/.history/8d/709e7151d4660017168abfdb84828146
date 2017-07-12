@@ -1,0 +1,177 @@
+package org.comcast.ad.service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.comcast.ad.database.DatabaseClass;
+import org.comcast.ad.model.CampaignModel;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+
+public class AdServiceIntg {
+
+	HttpClient httpClient = HttpClientBuilder.create().build();
+	public final String url_base = "http://localhost:8080/ad/";
+	
+	@Before
+	public void setup() {
+		DatabaseClass.ResetDB();
+	}
+	
+	@Test
+	public void CreateAdsIntg() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.createAd();
+		System.out.println(httpResponse);
+		Assert.assertEquals(201, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void getAllAdsIntg() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.getAllCurrentCampaigns();
+		Assert.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void getAdByPartnerId() throws Exception {
+		HttpResponse httpResponse = AdServiceHelper.getCurrentCampaignById("1");
+		Assert.assertEquals(200, httpResponse.getStatusLine().getStatusCode());
+	}
+	
+	@Test
+	public void testCreateAndGetCampaign() throws Exception {
+		HttpResponse createResponse = AdServiceHelper.createAd("11", 16, "SomeContent");
+		Assert.assertEquals(201, createResponse.getStatusLine().getStatusCode());
+		
+		HttpResponse getResponse = AdServiceHelper.getCurrentCampaignById("11");
+		Assert.assertEquals(200, getResponse.getStatusLine().getStatusCode());
+		List<CampaignModel> camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+		
+		
+		Assert.assertEquals(1, camModelList.size());
+		
+		CampaignModel camModel = camModelList.get(0);
+		
+		Assert.assertEquals("11", camModel.getPartnerId());
+		Assert.assertTrue(LocalDateTime.now().isBefore(camModel.getExpiration()));
+		Assert.assertEquals("SomeContent", camModel.getAdContent());
+	}
+	
+	@Test
+	public void testCampaignExpiring() throws Exception {
+		HttpResponse createResponse;
+		HttpResponse getResponse;
+	
+		int numOfAds = 3;
+		for (int i=0; i<numOfAds; i++) {
+			createResponse = AdServiceHelper.createAd("1", i+1, Integer.toString(i));
+			Assert.assertEquals(201, createResponse.getStatusLine().getStatusCode());
+		}
+		
+		getResponse = AdServiceHelper.getCurrentCampaignById("1", false);
+		List<CampaignModel> camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+		Assert.assertEquals("1", camModelList.get(0).getPartnerId());
+		Assert.assertTrue(LocalDateTime.now().isBefore(camModelList.get(0).getExpiration()));
+		Assert.assertEquals("0", camModelList.get(0).getAdContent());
+		
+		
+		TimeUnit.SECONDS.sleep(1);
+		
+		getResponse = AdServiceHelper.getCurrentCampaignById("1", false);
+		camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+		Assert.assertEquals("1", camModelList.get(0).getPartnerId());
+		Assert.assertTrue(LocalDateTime.now().isBefore(camModelList.get(0).getExpiration()));
+		Assert.assertEquals("1", camModelList.get(0).getAdContent());
+		
+		TimeUnit.SECONDS.sleep(1);
+		
+		getResponse = AdServiceHelper.getCurrentCampaignById("1", false);
+		camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+		Assert.assertEquals("1", camModelList.get(0).getPartnerId());
+		Assert.assertTrue(LocalDateTime.now().isBefore(camModelList.get(0).getExpiration()));
+		Assert.assertEquals("2", camModelList.get(0).getAdContent());
+	}
+	
+	@Test
+	public void testCreateManyAndGetCampaigns() throws Exception {
+		HttpResponse createResponse;
+		HttpResponse getResponse;
+	
+		int numOfPartners = 5;
+		int numOfAds = 4;
+		for (int i=0; i<numOfPartners; i++) {
+			for (int j=0; j<numOfAds; j++) {
+				createResponse = AdServiceHelper.createAd(Integer.toString(i), 3, Integer.toString(j));
+				Assert.assertEquals(201, createResponse.getStatusLine().getStatusCode());
+			}
+		}
+		
+		for (int i=0; i<numOfPartners; i++) {
+			getResponse = AdServiceHelper.getCurrentCampaignById(Integer.toString(i), true);
+			Assert.assertEquals(200, getResponse.getStatusLine().getStatusCode());
+			List<CampaignModel> camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+			
+			Assert.assertEquals(numOfAds, camModelList.size());
+			for (int j=0; j<numOfAds; j++) {
+				Assert.assertEquals(Integer.toString(i), camModelList.get(j).getPartnerId());
+				Assert.assertTrue(LocalDateTime.now().isBefore(camModelList.get(j).getExpiration()));
+				Assert.assertEquals(Integer.toString(j), camModelList.get(j).getAdContent());
+			}
+		}
+	}
+	
+	@Test
+	public void testManyCampaignsExpiring() throws Exception {
+		HttpResponse createResponse;
+		HttpResponse getResponse;
+	
+		int numOfPartners = 5;
+		int numOfAds = 3;
+		for (int i=0; i<numOfPartners; i++) {
+			for (int j=0; j<numOfAds; j++) {
+				createResponse = AdServiceHelper.createAd(Integer.toString(i), j+1, Integer.toString(j));
+				Assert.assertEquals(201, createResponse.getStatusLine().getStatusCode());
+			}
+		}
+		
+		TimeUnit.SECONDS.sleep(1);
+		
+		for (int i=0; i<numOfPartners; i++) {
+			getResponse = AdServiceHelper.getCurrentCampaignById(Integer.toString(i), true);
+			Assert.assertEquals(200, getResponse.getStatusLine().getStatusCode());
+			List<CampaignModel> camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+			
+			Assert.assertEquals(numOfAds - 1, camModelList.size());
+		}
+		
+		TimeUnit.SECONDS.sleep(1);
+		
+		for (int i=0; i<numOfPartners; i++) {
+			getResponse = AdServiceHelper.getCurrentCampaignById(Integer.toString(i), true);
+			Assert.assertEquals(200, getResponse.getStatusLine().getStatusCode());
+			List<CampaignModel> camModelList = AdServiceHelper.ConvertJsonResponseToPojo(getResponse, AdServiceHelper.tr_listCampaignModel);
+			
+			Assert.assertEquals(numOfAds - 2, camModelList.size());
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

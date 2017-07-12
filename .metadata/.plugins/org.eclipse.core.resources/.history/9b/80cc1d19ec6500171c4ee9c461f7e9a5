@@ -1,0 +1,77 @@
+package org.comcast.ad.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+
+import org.comcast.ad.database.DatabaseClass;
+import org.comcast.ad.model.Ad;
+
+public class AdService {
+
+	private Map<String, Queue<Ad>> adsDB = DatabaseClass.getAdsMap();
+	
+	public AdService() {
+		Ad ad1 = new Ad("1", 234432432, "Ad1a");
+		Ad ad2 = new Ad("2", 42432343, "Ad2");
+		Ad ad3 = new Ad("1", 2342432, "Ad1b");
+		
+		addAd(ad1);
+		addAd(ad2);
+		addAd(ad3);
+	}
+	
+	public List<Ad> getAllAds() {
+		List<Queue<Ad>> c = new ArrayList<>(adsDB.values());
+		
+		List<Ad> d = new ArrayList<Ad>();
+		for (Queue<Ad> q : c) {
+			List<Ad> list = new ArrayList<>(q);
+			for (Ad a : list) {
+				d.add(a);
+			}
+		}
+		
+		return d;
+	}
+	
+	public Ad getAdById(String partnerId) {
+		if (isCampaignByIdValid(partnerId)) {
+			return adsDB.get(partnerId).peek();
+		}
+		return null;
+	}
+	
+	public void deleteAdById(String partnerId) {
+		;
+	}
+	
+	public void addAd(Ad ad) {
+		if (ad.getDuration() > 0) {
+			if (adsDB.containsKey(ad.getPartnerId())) {
+				adsDB.get(ad.getPartnerId()).add(ad);
+			} else {
+				adsDB.put(ad.getPartnerId(), new LinkedList<Ad>());
+			}
+		}
+		//TODO: Throw error
+	}
+	
+	
+	
+	
+	
+	private boolean isCampaignByIdValid(String partnerKey) {
+		while (!adsDB.get(partnerKey).isEmpty()) {
+			if (adsDB.get(partnerKey).peek().getExpiration().isAfter(LocalDateTime.now())) {
+				return true;
+			} else {
+				adsDB.get(partnerKey).poll();
+			}
+		}
+		return false;
+	}
+}

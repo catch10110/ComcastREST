@@ -1,0 +1,33 @@
+package org.comcast.ad.model;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class TestModel {
+	private String partnerid;
+	private String ad_content;
+	
+	public TestModel() {
+		;
+	}
+	
+	public TestModel(String test1, String test2) {
+		super();
+		this.partnerid = test1;
+		this.ad_content = test2;
+	}
+	public String getTest1() {
+		return partnerid;
+	}
+	public void setTest1(String test1) {
+		this.partnerid = test1;
+	}
+	public String getTest2() {
+		return ad_content;
+	}
+	public void setTest2(String test2) {
+		this.ad_content = test2;
+	}
+	
+	
+}

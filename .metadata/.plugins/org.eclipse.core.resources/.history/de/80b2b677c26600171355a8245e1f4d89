@@ -1,0 +1,67 @@
+package org.comcast.ad.service;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.comcast.ad.model.CampaignModel;
+import org.comcast.ad.model.PartnerAdModel;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class AdServiceHelper {
+
+	public static final HttpClient httpClient = HttpClientBuilder.create().build();
+	public static final String url_base = "http://localhost:8080/ad/";
+	public static final String jsonType = "application/json";
+	
+	public static HttpResponse createAd() throws Exception {
+		PartnerAdModel ad = new PartnerAdModel("1", 555, "Helper");
+
+		HttpPost postRequest = new HttpPost(url_base);
+		
+		
+		StringEntity input = new StringEntity("{\"partner_id\":\"1\",\"duration\":\"555\",\"ad_content\":\"Helper\"}");System.out.println(input.getContent().toString());
+		
+		input.setContentType(jsonType);
+		//postRequest.setHeader("Accept", jsonType);
+		postRequest.setHeader("content-type", jsonType);
+		postRequest.setEntity(input);
+		
+		return httpClient.execute(postRequest);
+	}
+	
+	public static HttpResponse getAllCurrentCampaigns() throws ClientProtocolException, IOException {
+		HttpGet getRequest = new HttpGet(url_base + "ad/");
+		getRequest.setHeader("accept", jsonType);
+		HttpResponse response = httpClient.execute(getRequest);
+		return response;
+	}
+	
+	public static HttpResponse getCurrentCampaignById(String partnerId) throws ClientProtocolException, IOException {
+		HttpGet getRequest = new HttpGet(url_base + "ad/" + partnerId);
+		getRequest.setHeader("accept", jsonType);
+		HttpResponse response = httpClient.execute(getRequest);
+		return response;
+	}
+	
+	public static String ConvertPojoToJson(Object o) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(o);
+	}
+	
+	public static <T> T ConvertJsonToPojo(String json, Class<T> cls) throws JsonParseException, JsonMappingException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(json, cls);
+	}
+}

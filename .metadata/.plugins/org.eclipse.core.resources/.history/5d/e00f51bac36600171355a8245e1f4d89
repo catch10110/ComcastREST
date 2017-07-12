@@ -1,0 +1,47 @@
+package org.comcast.ad.model;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class PartnerAdModel {
+	
+	@XmlElement(name = "partner_id") private String partner_id;
+	@XmlElement(name = "duration") private long duration;
+	@XmlElement(name = "ad_content") private String ad_content;
+	
+	public PartnerAdModel() {
+		;
+	}
+	
+	public PartnerAdModel(String partnerId, long duration, String adContent) {
+		this.partner_id = partnerId;
+		this.duration = duration;
+		this.ad_content = adContent;
+	}
+	
+	public String getPartnerId() {
+		return partner_id;
+	}
+	
+	public void setPartnerId(String partnerId) {
+		this.partner_id = partnerId;
+	}
+	
+	public long getDuration() {
+		return duration;
+	}
+	
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+	
+	public String getAdContent() {
+		return ad_content;
+	}
+	
+	public void setAdContent(String adContent) {
+		this.ad_content = adContent;
+	}
+
+}

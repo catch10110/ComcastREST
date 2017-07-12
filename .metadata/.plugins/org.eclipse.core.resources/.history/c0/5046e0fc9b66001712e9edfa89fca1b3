@@ -1,0 +1,67 @@
+package org.comcast.ad.service;
+
+import static org.junit.Assert.fail;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+
+import org.comcast.ad.database.DatabaseClass;
+import org.comcast.ad.model.CampaignModel;
+import org.comcast.ad.model.PartnerAdModel;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class AdServiceTest {
+
+	public Map<String, Queue<CampaignModel>> mockCampaignDB = DatabaseClass.CampaignMap;
+	
+	@Before
+	public void setup() {
+		DatabaseClass.CampaignMap = new HashMap<>();
+	}
+	
+	@Test
+	public void testAdService() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetAllAds() {
+		AdService adService = new AdService();
+		
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetAllAdsByPartner() {
+		AdService adService = new AdService();
+		PartnerAdModel partnerAdModel = new PartnerAdModel("1", 30, "TestContent");
+		CampaignModel model = new CampaignModel(partnerAdModel);
+		
+		Assert.assertEquals(1, 1);adService.getAllAdsByPartner("1");
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetCurrentAdByPartnerId() {
+		AdService adService = new AdService();
+		PartnerAdModel partnerAdModel = new PartnerAdModel("1", 30, "TestContent");
+		CampaignModel model = new CampaignModel(partnerAdModel);
+		Queue<CampaignModel> q = new LinkedList<>();
+		q.add(model);
+		mockCampaignDB.put("1", q);
+		
+		Assert.assertEquals("1", mockCampaignDB.get("1").peek().getPartnerId());
+		//Assert.assertEquals(30, mockCampaignDB.get("1").peek().getExpiration().);
+		Assert.assertEquals("TestContent", mockCampaignDB.get("1").peek().getAdContent());
+	}
+
+	@Test
+	public void testAddAd() {
+		fail("Not yet implemented");
+	}
+
+}

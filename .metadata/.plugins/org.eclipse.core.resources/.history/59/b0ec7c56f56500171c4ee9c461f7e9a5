@@ -1,0 +1,34 @@
+package org.comcast.ad.service;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class AdServiceTest {
+
+	@Test
+	public void testAdService() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetAllAds() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testGetAdById() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testDeleteAdById() {
+		fail("Not yet implemented");
+	}
+
+	@Test
+	public void testAddAd() {
+		fail("Not yet implemented");
+	}
+
+}

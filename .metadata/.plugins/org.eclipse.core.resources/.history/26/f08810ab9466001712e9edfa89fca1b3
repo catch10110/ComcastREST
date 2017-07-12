@@ -1,0 +1,13 @@
+package org.comcast.ad.exception;
+
+public class NoActiveCampaignException extends RuntimeException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3028684014965644165L;
+
+	public NoActiveCampaignException(String message) {
+		super(message);
+	}
+}

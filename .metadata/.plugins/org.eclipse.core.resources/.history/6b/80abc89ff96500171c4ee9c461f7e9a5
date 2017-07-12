@@ -1,0 +1,42 @@
+package org.comcast.ad.resources;
+
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.comcast.ad.model.Ad;
+import org.comcast.ad.service.AdService;
+
+@Path("/ad")
+public class AdResource {
+	
+	AdService adService = new AdService();
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Ad> getTest() {
+		return adService.getAllAds();
+	}
+	
+	@GET
+	@Path("/{partnerId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Ad getCurrentCampaignById(@PathParam("partnerId") String partnerId) {
+		return adService.getAdById(partnerId);
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String addAd(Ad ad) {
+		adService.addAd(ad);
+		return "Post";
+	}
+
+}
